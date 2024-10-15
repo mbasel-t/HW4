@@ -1,5 +1,5 @@
 /*
- * *** YOUR NAME GOES HERE / YOUR SECTION NUMBER ***
+ * *** Malec B. Tarabein / 002 ***
  *
  * This hashMap object represents an over simplification of Java's implementation of HashMap within
  * Java's Collection Framework Library. You are to complete the following methods:
@@ -89,9 +89,35 @@ class HashNode<K,V> {
     K key;
     V value;
     HashNode<K, V> next;
-    public HashNode() {
-        this.key=key;
-        this.value=value;
+    public HashNode(){}
+
+    /**
+     * More convenient constructor
+     * @param _key Key to be added
+     * @param _value Value to be added
+     */
+    public HashNode(K _key, V _value) {
+        this.key = _key;
+        this.value = _value;
+    }
+
+    /**
+     * Another more convenient constructor
+     * @param _key Key to be added
+     * @param _value Value to be added
+     * @param _next Next node
+     */
+    public HashNode(K _key, V _value, HashNode<K, V> next) {
+        this.key = _key;
+        this.value = _value;
+    }
+
+    /**
+     * Another constructor that is theoretically useless but is convenient for exactly one problem
+     * @param _next
+     */
+    public HashNode(HashNode<K, V> _next) {
+        this.next = _next;
     }
 }
 
@@ -231,7 +257,34 @@ class myHashMap<K,V> {
          * return value is returned the invoking function based on the remove outcome.
          */
 
-        return null;
+        int index = getBucketIndex(key);
+        HashNode<K, V> head = bucket.get(index);
+
+        // If node to be removed stands alone, remove from bucket
+        if(head.key.equals(key) && head.next != null) {
+            bucket.remove(index);
+            return head.value;
+        }
+
+        // If node to be removed is head, decapitate
+        if(head.key.equals(key)) {
+            bucket.set(index, head.next);
+            return head.value;
+        }
+
+        // If node to be removed is not in front, traverse
+        while (head.next != null && !head.next.key.equals(key)) {
+            head = head.next;
+        }
+
+        if(head.next == null) {
+            return null;
+        }
+
+        V result = head.next.value;
+        head.next = head.next.next;
+
+        return result;
     }
 
 
@@ -406,7 +459,22 @@ class myHashMap<K,V> {
          * replace (see method's prologue above).
          */
 
-        return val;
+         int index = getBucketIndex(key);
+
+        HashNode<K, V> node = bucket.get(index);
+
+        while (node != null && !node.key.equals(key)) {
+            node = node.next;
+        }
+
+        if(node == null) {
+            return null;
+        }
+
+        V result = node.value;
+        node.value = val;
+
+        return result;
     }
 
     
@@ -434,7 +502,18 @@ class myHashMap<K,V> {
          * value 'oldval', and is so, it SHOULD call replace(K, V) for code reuse.
          */
 
-        return false;
+         V originalValue = get(key);
+
+        if (originalValue == null || 
+           (! originalValue.equals(oldVal)) ) {
+            return false;
+        }
+
+        // Key was found and its value equals the passed
+        // parameter 'val'
+        replace(key, newVal);
+
+        return true;
     }
 
 

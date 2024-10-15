@@ -1,5 +1,5 @@
 /*
- * *** YOUR NAME GOES HERE / YOUR SECTION NUMBER ***
+ * *** Malec B. Tarabein / 002 ***
  *
  * This HashingProblems object contains three methods / problems that you must
  * complete utilize the HashMap object within the Java's Collection Framework Library.
@@ -41,7 +41,17 @@ class HashingProblems {
          * returning 0.0/0.0 IS correct (which would return a non-number).
          */
 
-         return 0.0 / 0.0;
+          double sum = 0;
+          int count = 0;
+          for (int num : array) {
+            Integer val = map.get(num);
+            if (val != null) {
+              sum += val;
+              count++;
+            }
+          }
+
+          return (count == 0 ? 0.0 : sum/count);
   }
 
 
@@ -55,13 +65,18 @@ class HashingProblems {
   public ArrayList<String> odd(HashMap<Integer, String> map) {
     
       ArrayList<String> result = new ArrayList<>();
+      ArrayList<Integer> keys = new ArrayList<Integer>(map.keySet());
 
-      /*
-       * ADD YOUR CODE HERE
-       *
-       * Hint: Consider iterating over the HashMap using the keySet method.
-       */
+      for (int i = 0; i < keys.size(); i++) {
+        int curr = keys.get(i);
+        if(curr%2 == 1) {
+            String output = map.get(keys.get(i));
 
+            if(output != null) {
+                result.add(output);
+            }
+        }
+      }
 
       return result;
   }
@@ -105,12 +120,24 @@ class HashingProblems {
    */
 
   public int twoSums(int[] numbers, int k) {
+      
+      Set<Integer> set = new HashSet<>();
 
-      /*
-       * ADD YOUR CODE HERE
-       */
+      // put all numbers in a set
+      for (int number : numbers)
+        set.add(number);
 
-      return -1;
+      // iterate through numbers one more time to find pairs
+      // only look at cases where compliment minus number equals K
+      int result = 0;
+      for (int number : numbers) {
+        int compliment = number + k;
+        if(set.contains(compliment) && set.contains(number)) {
+            result++;
+        }
+    }
+
+      return result;
   }
 
 } /* end class HashingProblems */
