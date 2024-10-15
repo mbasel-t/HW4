@@ -51,7 +51,7 @@ class HashingProblems {
             }
           }
 
-          return (count == 0 ? 0.0 : sum/count);
+          return sum/count;
   }
 
 
